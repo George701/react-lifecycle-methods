@@ -21,15 +21,20 @@ export default class Post extends Component {
     const person = profiles[userId-1];
 
     return (
-      <div className='wrapper'>
+      <div className='post-wrapper'>
         <div className='person'>
           <img className='avatar' src={person.avatar} alt="avatar" />
           <div className='name'>{person.name}</div>
+        </div>
+        <div>
+          <div className='title'>
+            {title}
+          </div>
+          <div className='body'>
+            {body}
+          </div>
         </div>
       </div>
     )
   }
 };
-
-const findPerson = (id) => {
-}

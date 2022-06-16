@@ -31,7 +31,7 @@ export default class App extends Component {
   render() {
     const { posts, loading } = this.state;
     return (
-      <div>
+      <div className='wrapper'>
         { loading && <div>Loading...</div> }
         { (!loading && posts.length === 0) && <div>There is no posts yet</div> }
         { (!loading  && posts.length !== 0) && posts.map(post => <Post key={post.id} {...post} />) }
