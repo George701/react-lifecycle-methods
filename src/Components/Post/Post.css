@@ -39,6 +39,10 @@
   margin-right: 8px;
 }
 
+.delete {
+  color: #b71c1c;
+}
+
 
 .person {
   display: flex;
