@@ -16,6 +16,7 @@ export const loadPosts = async () => {
 export const deletePostAPI = async id => {
   try {
     const res = await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+    showToast('Пост успешно удален');
     return res.status;
   } catch (error) {
     console.error(error)
