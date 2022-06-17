@@ -13,11 +13,12 @@ export default class Post extends Component {
       body: props.body,
     }
   }
+
   render() {
     const {id, userId, title, body} = this.state;
     const { deletePost } = this.props;
 
-    const person = profiles[userId-1];
+    const person = profiles[userId];
 
     return (
       <div className='post-wrapper'>

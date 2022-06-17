@@ -1,0 +1,104 @@
+import React, { Component } from 'react';
+import './EditPost.css';
+import { profiles } from '../../constants';
+import showToast from '../../showToast';
+
+export class EditPost extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userId: 0,
+      id: null,
+      title: '',
+      body: '',
+      // remember to add it at last
+      btnDisabled: false,
+    }
+  }
+
+  // #TODO: component unmount clear the state
+
+  render() {
+    const { id, title, body, userId, btnDisabled } = this.state;
+    const { closeModal } = this.props;
+
+    return (
+      <div className='post-wrapper'>
+
+        <div className='form-row'>
+          <label htmlFor="User">User</label>
+          <select
+            className='text-inputs selector-input'
+            value={userId}
+            name='userId'
+            onChange={this.onChangeUser}
+          >
+              {profiles.map(profile => {
+                  return <option key={profile.id} value={profile.id}>{profile.name}</option>
+              })};
+          </select>
+        </div>
+
+        <div className='form-row'>
+          <label htmlFor="title">Title</label>
+          <input
+            className='text-inputs'
+            type='text'
+            name='title'
+            value={title}
+            onChange={this.onChange}
+          />
+        </div>
+
+        <div className='form-row'>
+          <label htmlFor="body">Body</label>
+          <textarea
+            className='text-inputs body-input'
+            name='body'
+            value={body}
+            onChange={this.onChange}
+          />
+        </div>
+
+        <div className='form-btn-wrapper'>
+          <button className='controller-btn apply-btn' onClick={this.checkAndSave} disabled={btnDisabled}>
+            {!!id ? 'Apply' : 'Create'}
+          </button>
+          <button className='controller-btn cancel-btn' onClick={() => closeModal()}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  onChangeUser = e => this.setState({userId: parseInt(e.target.value)});
+  
+  onChange = e => this.setState({[e.target.name]: e.target.value});
+
+  checkAndSave = () => {
+    this.setState({ btnDisabled: true });
+    const { id, title, body, userId } = this.state;
+    const { editPost } = this.props;
+
+    if (userId === 0) {
+      showToast('Please select user', true);
+      return;
+    }
+
+    if (title.length === 0) {
+      showToast('Please enter post title', true);
+      return;
+    }
+
+    if (body.length === 0) {
+      showToast('Please enter post body', true);
+      return;
+    }
+
+    editPost(id, userId, title, body)
+  }
+};
+
+export default EditPost;

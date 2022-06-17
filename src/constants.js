@@ -1,5 +1,10 @@
 export const profiles = [
   {
+    id: 0,
+    avatar: '',
+    name: 'Unknown'
+  },
+  {
     id: 1,
     avatar: 'https://img.freepik.com/free-photo/headshot-portrait-happy-ginger-woman-with-freckles-smiling-white_176420-7984.jpg',
     name: 'Alena Villanueva'
