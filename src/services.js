@@ -12,3 +12,14 @@ export const loadPosts = async () => {
     return [];
   }
 }
+
+export const deletePostAPI = async id => {
+  try {
+    const res = await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+    return res.status;
+  } catch (error) {
+    console.error(error)
+    showToast('Ошибка удаления поста', true);
+    return 500;
+  }
+}

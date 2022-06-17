@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import showToast from './showToast';
-import { loadPosts } from './services';
+import './App.css';
+import { loadPosts, deletePostAPI } from './services';
 import Post from './Components/Post';
-import './App.css'
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    // showToast('constructor()');
     this.state = {
       loading: true,
       posts: []
@@ -21,11 +19,19 @@ export default class App extends Component {
   
   async componentDidMount() {
     const posts = await loadPosts();
-    // console.log(posts);
     if (posts.length !== 0) {
       this.setState({ posts })
     }
     this.setState({ loading: false });
+  }
+
+  deletePost = async id => {
+    const { posts } = this.state;
+    const status = await deletePostAPI(id);
+    if (status === 200) {
+      const result = posts.filter(post => post.id !== id);
+      this.setState({ posts: result })
+    }
   }
 
   render() {
@@ -34,7 +40,7 @@ export default class App extends Component {
       <div className='wrapper'>
         { loading && <div>Loading...</div> }
         { (!loading && posts.length === 0) && <div>There is no posts yet</div> }
-        { (!loading  && posts.length !== 0) && posts.map(post => <Post key={post.id} {...post} />) }
+        { (!loading  && posts.length !== 0) && posts.map(post => <Post key={post.id} {...post} deletePost={this.deletePost} />) }
       </div>
     )
   }

@@ -6,8 +6,6 @@ export default class Post extends Component {
   constructor(props) {
     super(props);
 
-    // console.log(props);
-
     this.state = {
       userId: props.userId,
       id: props.id,
@@ -17,11 +15,16 @@ export default class Post extends Component {
   }
   render() {
     const {id, userId, title, body} = this.state;
+    const { deletePost } = this.props;
 
     const person = profiles[userId-1];
 
     return (
       <div className='post-wrapper'>
+        <div className='controller-wrapper'>
+          <div className='btn edit'>Edit</div>
+          <div className='btn delete' onClick={() => deletePost(id)}>Delete</div>
+        </div>
         <div className='person'>
           <img className='avatar' src={person.avatar} alt="avatar" />
           <div className='name'>{person.name}</div>
