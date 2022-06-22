@@ -1,30 +1,36 @@
 import React, { Component } from 'react';
 import './Post.css';
 import { profiles } from '../../constants';
+import EditPost from '../EditPost';
 
 export default class Post extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      userId: props.userId,
-      id: props.id,
-      title: props.title,
-      body: props.body,
-    }
+  state = {
+    isDeleteBtnDisabled: false,
+    isEditing: false,
   }
 
   render() {
-    const {id, userId, title, body} = this.state;
-    const { deletePost } = this.props;
+    const { isDeleteBtnDisabled, isEditing } = this.state;
+    const { editPost, id, userId, title, body } = this.props;
 
     const person = profiles[userId];
 
+    if (isEditing) return (
+      <EditPost
+        id={id}
+        userId={userId}
+        title={title}
+        body={body}
+        closeModal={() => this.setState({isEditing: false})}
+        editPost={editPost}
+      />
+    )
+
     return (
-      <div className='post-wrapper'>
+      <div className={`post-wrapper ${isDeleteBtnDisabled && 'deleting-post'}`}>
         <div className='controller-wrapper'>
-          <div className='btn edit'>Edit</div>
-          <div className='btn delete' onClick={() => deletePost(id)}>Delete</div>
+          <div className='btn edit' onClick={() => this.setState({isEditing: true})}>Edit</div>
+          <div className={`btn delete ${isDeleteBtnDisabled && 'not-allowed'}`} onClick={this.delete}>Delete</div>
         </div>
         <div className='person'>
           <img className='avatar' src={person.avatar} alt="avatar" />
@@ -40,5 +46,10 @@ export default class Post extends Component {
         </div>
       </div>
     )
+  }
+
+  delete = () => {
+    this.setState({ isDeleteBtnDisabled: true });
+    this.props.deletePost();
   }
 };

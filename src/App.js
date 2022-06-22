@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { loadPosts, deletePostAPI, addPost } from './services';
+import { loadPosts, deletePostAPI, addPost, updatePost } from './services';
 import Post from './Components/Post';
 import EditPost from './Components/EditPost';
 
@@ -22,22 +22,30 @@ export default class App extends Component {
   async componentDidMount() {
     const posts = await loadPosts();
     if (posts.length !== 0) {
+      posts.sort((a, b) => {
+        return b.id - a.id;
+      })
       this.setState({ posts })
     }
     this.setState({ loadingPosts: false });
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // return nextState.posts !== this.state.posts;
+  //   console.log(nextState.posts[0], this.state.posts[0]);
+  //   return true;
+  // }
+
   render() {
     const { posts, loadingPosts, creatingNewPost } = this.state;
-    
     return (
       <div className='wrapper'>
         {
           creatingNewPost
-          ? <EditPost closeModal={this.newPostDisplay} editPost={this.editPost}/>
+          ? <EditPost closeModal={() => this.setState({ creatingNewPost: false})} editPost={this.editPost}/>
           : (
             <div className='new-post'>
-              <div className='btn' onClick={() => this.newPostDisplay()}>
+              <div className='btn' onClick={() => this.setState({ creatingNewPost: true})}>
                 New
               </div>
             </div>
@@ -47,7 +55,7 @@ export default class App extends Component {
         { (!loadingPosts && posts.length === 0) && <div>There is no posts yet</div> }
         { (!loadingPosts  && posts.length !== 0)
           && posts.map(post => (
-            <Post key={post.id} {...post} deletePost={this.deletePost} />)
+            <Post key={post.id} {...post} deletePost={() => this.deletePost(post.id)} editPost={this.editPost}/>)
           )
         }
       </div>
@@ -63,24 +71,31 @@ export default class App extends Component {
     }
   }
 
-  newPostDisplay = () => {
-    const { creatingNewPost } = this.state;
-    this.setState({ creatingNewPost: !creatingNewPost})
-  }
-
   editPost = async (id, userId, title, body) => {
     const { posts } = this.state;
+
     if (!!id) {
+      const newPosts = posts.map(post => {
+        if (post.id === id) {
+          const editedPost = {userId, id, title, body}
+          return editedPost
+        }
+        return post;
+      });
+      const status = await updatePost({id, userId, title, body});
+      if (status === 200) {
+        this.setState({ posts: newPosts });
+      }
 
     } else {
-      const model = { userId, id: posts.length+1, title, body };
+      
+      const id = !!posts.length ? (posts[0].id + 1) : 1;
+      const model = { userId, id, title, body };
       posts.unshift(model);
       const status = await addPost(model);
       if (status === 201) {
         this.setState({ posts });
       }
     }
-
-    this.newPostDisplay();
   }
 }

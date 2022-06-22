@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import './EditPost.css';
 import { profiles } from '../../constants';
 import showToast from '../../showToast';
+import { loadPost } from '../../services';
 
 export class EditPost extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      // userId: props.userId,
+      // id: props.id,
+      // title: props.title,
+      // body: props.body,
       userId: 0,
       id: null,
       title: '',
@@ -15,9 +20,18 @@ export class EditPost extends Component {
       // remember to add it at last
       btnDisabled: false,
     }
-  }
+  };
 
-  // #TODO: component unmount clear the state
+  async componentDidMount() {
+    if (this.props.id) {
+      this.setState({
+        id: this.props.id,
+        userId: this.props.userId,
+        title: this.props.title,
+        body: this.props.body
+      })
+    }
+  };
 
   render() {
     const { id, title, body, userId, btnDisabled } = this.state;
@@ -71,7 +85,7 @@ export class EditPost extends Component {
         </div>
       </div>
     )
-  }
+  };
 
   onChangeUser = e => this.setState({userId: parseInt(e.target.value)});
   
@@ -80,7 +94,7 @@ export class EditPost extends Component {
   checkAndSave = () => {
     this.setState({ btnDisabled: true });
     const { id, title, body, userId } = this.state;
-    const { editPost } = this.props;
+    const { editPost, closeModal } = this.props;
 
     if (userId === 0) {
       showToast('Please select user', true);
@@ -96,9 +110,10 @@ export class EditPost extends Component {
       showToast('Please enter post body', true);
       return;
     }
-
+    
+    closeModal();
     editPost(id, userId, title, body)
-  }
+  };
 };
 
 export default EditPost;
