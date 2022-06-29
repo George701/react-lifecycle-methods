@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './EditPost.css';
 import { profiles } from '../../constants';
 import showToast from '../../showToast';
-import { loadPost } from '../../services';
 
 export class EditPost extends Component {
   constructor(props) {
@@ -17,7 +16,6 @@ export class EditPost extends Component {
       id: null,
       title: '',
       body: '',
-      // remember to add it at last
       btnDisabled: false,
     }
   };

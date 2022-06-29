@@ -5,19 +5,11 @@ import Post from './Components/Post';
 import EditPost from './Components/EditPost';
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      creatingNewPost: false,
-      loadingPosts: true,
-      posts: []
-    }
-  }
-
-  // static getDerivedStateFromProps() {
-  //   // showToast('getDerivedStateFromProps()')
-  // }
+  state = {
+    creatingNewPost: false,
+    loadingPosts: true,
+    posts: []
+  };
   
   async componentDidMount() {
     const posts = await loadPosts();
@@ -29,12 +21,6 @@ export default class App extends Component {
     }
     this.setState({ loadingPosts: false });
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   // return nextState.posts !== this.state.posts;
-  //   console.log(nextState.posts[0], this.state.posts[0]);
-  //   return true;
-  // }
 
   render() {
     const { posts, loadingPosts, creatingNewPost } = this.state;

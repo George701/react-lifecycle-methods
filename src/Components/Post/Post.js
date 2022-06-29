@@ -2,11 +2,47 @@ import React, { Component } from 'react';
 import './Post.css';
 import { profiles } from '../../constants';
 import EditPost from '../EditPost';
+import showToast from '../../showToast';
 
 export default class Post extends Component {
   state = {
     isDeleteBtnDisabled: false,
     isEditing: false,
+  };
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return false;
+  // }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.title !== this.props.title) {
+      showToast(`Title '${prevProps.title}' was changed on '${this.props.title}'`);
+    }
+    if (prevProps.userId !== this.props.userId) {
+      showToast(`User '${profiles[prevProps.userId].name}' was changed on '${profiles[this.props.userId].name}'`);
+    }
+    if (prevProps.body !== this.props.body) {
+      showToast(`Post body '${prevProps.body}' was changed on '${this.props.body}'`);
+    }
+
+    return null;
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.title !== prevProps.title) {
+      showToast('Title was updated');
+    }
+    if (this.props.userId !== prevProps.userId) {
+      showToast('User was updated');
+    }
+    if (this.props.body !== prevProps.body) {
+      showToast('Post body was updated');
+    }
+  };
+
+  componentWillUnmount() {
+    // document.removeEventListener("click", this.closeMenu);
+    showToast('Post was deleted');
   }
 
   render() {
