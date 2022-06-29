@@ -41,7 +41,6 @@ export default class Post extends Component {
   };
 
   componentWillUnmount() {
-    // document.removeEventListener("click", this.closeMenu);
     showToast('Post was deleted');
   }
 

@@ -20,7 +20,7 @@ export class EditPost extends Component {
     }
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     if (this.props.id) {
       this.setState({
         id: this.props.id,
@@ -110,7 +110,9 @@ export class EditPost extends Component {
     }
     
     closeModal();
-    editPost(id, userId, title, body)
+    editPost(id, userId, title, body);
+
+    this.setState({ btnDisabled: false });
   };
 };
 
