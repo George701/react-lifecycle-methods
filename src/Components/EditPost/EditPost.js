@@ -96,21 +96,20 @@ export class EditPost extends Component {
 
     if (userId === 0) {
       showToast('Please select user', true);
-      return;
     }
 
     if (title.length === 0) {
       showToast('Please enter post title', true);
-      return;
     }
 
     if (body.length === 0) {
       showToast('Please enter post body', true);
-      return;
     }
-    
-    closeModal();
-    editPost(id, userId, title, body);
+
+    if (userId !== 0 && title.length !== 0 && body.length !== 0) {
+      closeModal();
+      editPost(id, userId, title, body)
+    }
 
     this.setState({ btnDisabled: false });
   };
